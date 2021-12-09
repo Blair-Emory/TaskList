@@ -65,7 +65,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import ToDoItemComponent from './ToDoItemComponent.vue';
 
 
