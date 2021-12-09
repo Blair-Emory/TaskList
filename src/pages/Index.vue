@@ -1,16 +1,20 @@
 <template>
   <q-page class="flex flex-center">
     <div>
-      Hell Yeah Motherfuckers!!
-      I can Code!
+      <to-do-list-component/>
     </div>
   </q-page>
 </template>
 
 <script>
 import { defineComponent } from 'vue';
+import ToDoListComponent from '../components/ToDoListComponent.vue'
 
 export default defineComponent({
-  name: 'PageIndex'
+  name: 'PageIndex',
+
+  components: {
+    ToDoListComponent
+  }
 })
 </script>
