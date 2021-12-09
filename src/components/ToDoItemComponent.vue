@@ -12,8 +12,11 @@
 import { ref } from 'vue';
   export default {
 
-    props: {
-      label: { required: true, type: String },
+    data() {
+      return {
+        label: 'New Task',
+        done: false
+      }
     },
 
     setup() {

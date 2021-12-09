@@ -3,7 +3,7 @@
 
 <!-- Make the card for the list to exist on. -->
 <template>
-  <q-card flat bordered="my-card">
+  <q-card flat>
 
     <!--List Title-->
     <q-card-section >
@@ -37,14 +37,33 @@
     <q-separator/>
 
     <!-- To-Do items -->
-    <q-card-section>
-      <div class="items-left">
-        <QList ref="list">
+    <q-card-section horizontal>
+      <div>
 
-          <to-do-item-component label= "This is the first Item"></to-do-item-component>
-          <to-do-item-component label= "This is the second"></to-do-item-component>
+        <!-- This will iterate through every task in tasks list and create an item for it -->
+        <q-item
+          v-for="taskItem in tasks"
+          :key="taskItem.label"
+          @click="taskItem.done = !taskItem.done"
+          :class="{ 'done' : taskItem.done }"
+          clickable
+          v-ripple>
 
-        </QList>
+          <!-- Task Item -->
+          <div class="row">
+            <q-item-section avatar class="no-margin">
+              <q-checkbox
+                v-model="taskItem.done"
+                color="accent"
+                class="no-pointer-events" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label> {{ taskItem.label }} </q-item-label>
+            </q-item-section>
+          </div>
+
+
+        </q-item>
       </div>
     </q-card-section>
 
@@ -57,7 +76,7 @@
           color="secondary"
           icon="add"
           clickable
-          @click="onClick"/>
+          @click="addTask"/>
       </div>
     </q-card-section>
 
@@ -66,20 +85,49 @@
 
 <script>
 import ToDoItemComponent from './ToDoItemComponent.vue';
-
+import { useQuasar } from 'quasar';
 
   export default {
 
     name: 'ToDoList',
-    components: { ToDoItemComponent },
-    props: {
-      title: {required: false, type: String, default: 'New List'}
+
+    data(){
+      return {
+        title: 'New List',
+        tasks: [
+          {
+            label: 'Blah',
+            done: false
+          },
+          {
+            label: "Blah Blah",
+            done: false
+          },
+          {
+            label: "some really long string to see if this wraps or extends the card",
+            done: true
+          }
+        ]
+      }
     },
     methods: {
-      onClick(){
+      addTask(){
+
 
       }
-    }
+
+
+    },
+
 
   };
 </script>
+
+<style lang="scss">
+  .done {
+    .q-item__label {
+      text-decoration: line-through;
+      color: rgba(187, 187, 187, 0.5);
+    }
+  }
+</style>

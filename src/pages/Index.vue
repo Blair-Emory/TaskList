@@ -1,7 +1,7 @@
 <template>
   <q-page class="flex flex-center">
     <div>
-      <to-do-list-component/>
+      <to-do-list-component style= "max-width: 100%; width: 350px"/>
     </div>
   </q-page>
 </template>
