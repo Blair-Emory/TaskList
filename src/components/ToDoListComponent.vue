@@ -15,7 +15,7 @@
 
         <!--Options Button-->
         <div class="col-auto">
-         <q-btn color="grey-7" round flat dense icon="more_vert">
+         <q-btn color="white" round flat dense icon="more_vert">
            <q-menu cover auto-close>
              <q-list>
                <q-item clickable>
@@ -37,30 +37,41 @@
     <q-separator/>
 
     <!-- To-Do items -->
-    <q-card-section horizontal>
+    <q-card-section>
       <div>
 
         <!-- This will iterate through every task in tasks list and create an item for it -->
         <q-item
-          v-for="taskItem in tasks"
+          v-for="(taskItem, index) in tasks"
           :key="taskItem.label"
           @click="taskItem.done = !taskItem.done"
           :class="{ 'done' : taskItem.done }"
+          class="row items-center justify-between"
           clickable
           v-ripple>
 
           <!-- Task Item -->
-          <div class="row">
-            <q-item-section avatar class="no-margin">
-              <q-checkbox
-                v-model="taskItem.done"
-                color="accent"
-                class="no-pointer-events" />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label> {{ taskItem.label }} </q-item-label>
-            </q-item-section>
-          </div>
+            <div class="col-auto">
+              <q-item-section avatar>
+                <q-checkbox v-model="taskItem.done"
+                            color="accent"
+                            class="no-pointer-events" />
+              </q-item-section>
+            </div>
+            <div class="col">
+              <q-item-section>
+                <q-item-label> {{ taskItem.label }} </q-item-label>
+              </q-item-section>
+            </div>
+            <div class="col-auto">
+              <q-item-section>
+                <q-btn round
+                       flat
+                       dense
+                       icon="delete"
+                       @click.stop="deleteTask(index)"/>
+              </q-item-section>
+            </div>
 
 
         </q-item>
@@ -76,7 +87,7 @@
           color="secondary"
           icon="add"
           clickable
-          @click="addTask"/>
+          @click="newTask"/>
       </div>
     </q-card-section>
 
@@ -106,14 +117,53 @@ import { useQuasar } from 'quasar';
           {
             label: "some really long string to see if this wraps or extends the card",
             done: true
+          },
+          {
+            label: "Even longer label to see if this truely messes up everything that goes on within this card. Lets see how this goes. Woop Woop.",
+            done: true
           }
         ]
       }
     },
+    setup() {
+      const $q = useQuasar()
+
+      function newTask () {
+
+        $q.dialog({
+          dark: true,
+          title: 'New Task',
+          prompt: {
+            model: '',
+            type: 'text'
+          },
+          cancel: true,
+          persistent: true
+        }).onOk(data => {
+
+          //Create the new tasks
+          this.tasks.insert({
+            label: data,
+            done: false
+          })
+
+        }).onCancel(() => {
+          //Cancel creating new task
+        }).onDismiss(() => {
+          //Triggered on both Okay and Cancelled
+        })
+      }
+
+      return { newTask }
+    },
     methods: {
-      addTask(){
+      addTask(data){
 
 
+      },
+
+      deleteTask(index) {
+        this.tasks.splice(index, 1);
       }
 
 
