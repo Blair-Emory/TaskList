@@ -142,7 +142,7 @@ import { useQuasar } from 'quasar';
         }).onOk(data => {
 
           //Create the new tasks
-          this.tasks.insert({
+          this.tasks.push({
             label: data,
             done: false
           })
