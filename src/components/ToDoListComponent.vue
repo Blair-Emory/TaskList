@@ -13,6 +13,7 @@
           <div class="text-h6">New Task</div>
         </q-card-section>
 
+        <!-- Text Prompt -->
         <q-card-section class="q-pt-none">
           <q-input dense v-model="task" autofocus @keyup.enter="prompt = false; addTask(); data = '';" />
         </q-card-section>
@@ -88,6 +89,7 @@
               <q-item-section>
                 <q-btn round
                        flat
+                       size="sm"
                        dense
                        icon="delete"
                        @click.stop="deleteTask(index)" />
@@ -116,8 +118,6 @@
 </template>
 
 <script>
-import ToDoItemComponent from './ToDoItemComponent.vue';
-import { useQuasar } from 'quasar';
   import { ref } from 'vue';
   export default {
 
@@ -131,10 +131,23 @@ import { useQuasar } from 'quasar';
 
         //List
         title: 'New List',
-        tasks: [ ]
+        tasks: [
+          {
+            label: 'Task 1',
+            done: false
+          },
+          {
+            label: 'Task 2',
+            done: false
+          },
+          {
+            label: 'Task 3',
+            done: false
+          }
+         ]
       }
     },
-    
+
     methods: {
       addTask(){
 
@@ -155,9 +168,7 @@ import { useQuasar } from 'quasar';
         this.tasks.splice(index, 1);
       }
 
-
     },
-
 
   };
 </script>
