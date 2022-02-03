@@ -1,5 +1,5 @@
 
-<!-- Containers for the List Items -->
+<!-- List Component -->
 
 <!-- Make the card for the list to exist on. -->
 <template>
@@ -44,7 +44,8 @@
                   <q-item clickable>
                     <q-item-section>Remove List</q-item-section>
                   </q-item>
-                  <q-item clickable>
+                  <q-item clickable
+                          @click="edit = true">
                     <q-item-section>Edit List</q-item-section>
                   </q-item>
                   <q-item clickable>
@@ -85,8 +86,20 @@
                 <q-item-label> {{ taskItem.label }} </q-item-label>
               </q-item-section>
             </div>
+            <!-- edit task - only visible when list is in edit mode -->
             <div class="col-auto">
-              <q-item-section>
+              <q-item-section v-show="edit">
+                <q-btn round
+                       flat
+                       size="sm"
+                       dense
+                       icon="edit"
+                       @click.stop="editTask(index)"/>
+              </q-item-section>
+            </div>
+            <!-- delete task - only visible when list is in edit mode -->
+            <div class="col-auto">
+              <q-item-section v-show="edit">
                 <q-btn round
                        flat
                        size="sm"
@@ -101,8 +114,10 @@
         </div>
       </q-card-section>
 
-      <!-- Add new Item button -->
-      <q-card-section>
+      <!-- Add new Item button, Confirm Edits button -->
+      <q-card-section class="row items-center justify-between">
+
+        <!-- Add Task -->
         <div class="col-auto">
           <q-btn round
                  dense
@@ -110,6 +125,16 @@
                  icon="add"
                  clickable
                  @click="prompt = true" />
+        </div>
+
+        <!-- Confirm Changes (Only shows when list is in edit mode) -->
+        <div class="col-auto" v-show="edit">
+          <q-btn round
+                 dense
+                 color="secondary"
+                 icon="check"
+                 clickable
+                 @click="edit=false" />
         </div>
       </q-card-section>
 
@@ -125,30 +150,27 @@
 
     data(){
       return {
+        //Edit
+        edit: ref(false),
+
         //Dialog
         prompt: ref(false),
         task: ref(''),
 
         //List
-        title: 'New List',
+        title: ref('New List'),
         tasks: [
-          {
-            label: 'Task 1',
-            done: false
-          },
-          {
-            label: 'Task 2',
-            done: false
-          },
-          {
-            label: 'Task 3',
-            done: false
-          }
+            {
+              label: "example Task",
+              done: false,
+              edit: false
+            }
          ]
       }
     },
 
     methods: {
+
       addTask(){
 
         var taskValue = this.task
@@ -156,12 +178,17 @@
         if (taskValue != '') {
           this.tasks.push({
             label: taskValue,
-            done: false
+            done: false,
+            edit: false
           })
 
           this.task = ''
         }
 
+      },
+
+      editTask(index) {
+          //Some way to edit individual task items
       },
 
       deleteTask(index) {
