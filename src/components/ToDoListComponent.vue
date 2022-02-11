@@ -7,7 +7,7 @@
 
     <!-- Dialog Prompts-->
 
-    <q-dialog v-model="prompt" persistent>
+    <q-dialog v-model="textprompt" persistent>
       <q-card style="min-width: 350px">
         <q-card-section>
           <div class="text-h6">New Task</div>
@@ -15,31 +15,60 @@
 
         <!-- Text Prompt -->
         <q-card-section class="q-pt-none">
-          <q-input dense v-model="task" autofocus @keyup.enter="prompt = false; addTask(); data = '';" />
+          <q-input dense v-model="task" autofocus @keyup.enter="textprompt = false; addTask(); data = '';" />
         </q-card-section>
 
         <q-card-actions align="right" class="text-primary">
           <q-btn flat label="Cancel" v-close-popup />
-          <q-btn flat label="Add Task" v-close-popup @click="addTask(); data = '';"/>
+          <q-btn flat label="Add Task" v-close-popup @click="textprompt = false; addTask(); data = '';"/>
         </q-card-actions>
       </q-card>
     </q-dialog>
 
+    <q-dialog v-model="colorprompt" persistent>
+      <q-card style="min-width: 350px">
+        <q-card-section>
+          <div class="text-h6">New Color</div>
+        </q-card-section>
+
+        <q-card-section>
+          <q-color v-model="hex" no-header class="my-picker" />
+        </q-card-section>
+
+        <q-card-actions align="right" class="text-primary">
+          <q-btn flat label="Cancel" v-close-popup />
+          <q-btn flat label="Confirm" v-close-popup @click="colorprompt = false; addTask(); data = '';"/>
+      </q-card-actions>
+      </q-card>
+    </q-dialog>
+
     <!-- List Card -->
-    <q-card flat>
+    <q-card flat :style="{background: hex}">
 
       <!--List Title-->
       <q-card-section>
         <div class="row items-center">
           <div class="col">
-            <QItemLabel class="text-weight-medium"> {{title}} </QItemLabel>
+            <QItemLabel class="text-weight-medium" @click.stop> {{title}}
+              <q-popup-edit
+                v-model="title"
+                auto-save
+                v-slot="scope"
+                :disable="!edit">
+                  <q-input
+                    v-model="scope.value"
+                    dense
+                    autofocus
+                    @keyup.enter="scope.set"/>
+              </q-popup-edit>
+            </QItemLabel>
           </div>
 
 
           <!--Options Button-->
           <div class="col-auto">
             <q-btn color="white" round flat dense icon="more_vert">
-              <q-menu cover auto-close>
+              <q-menu cover auto-close :style="{background: hex}">
                 <q-list>
                   <q-item clickable>
                     <q-item-section>Remove List</q-item-section>
@@ -48,8 +77,9 @@
                           @click="edit = true">
                     <q-item-section>Edit List</q-item-section>
                   </q-item>
-                  <q-item clickable>
-                    <q-item-section>Share</q-item-section>
+                  <q-item clickable
+                          @click="colorprompt = true">
+                    <q-item-section>Change Color</q-item-section>
                   </q-item>
                 </q-list>
               </q-menu>
@@ -83,20 +113,23 @@
             </div>
             <div class="col">
               <q-item-section>
-                <q-item-label> {{ taskItem.label }} </q-item-label>
+                <q-item-label
+                  @click.stop> {{ taskItem.label }}
+                  <q-popup-edit
+                    v-model="taskItem.label"
+                    auto-save
+                    v-slot="scope"
+                    :disable="!edit">
+                    <q-input
+                      v-model="scope.value"
+                      dense
+                      autofocus
+                      @keyup.enter="scope.set"/>
+                  </q-popup-edit>
+                </q-item-label>
               </q-item-section>
             </div>
-            <!-- edit task - only visible when list is in edit mode -->
-            <div class="col-auto">
-              <q-item-section v-show="edit">
-                <q-btn round
-                       flat
-                       size="sm"
-                       dense
-                       icon="edit"
-                       @click.stop="editTask(index)"/>
-              </q-item-section>
-            </div>
+
             <!-- delete task - only visible when list is in edit mode -->
             <div class="col-auto">
               <q-item-section v-show="edit">
@@ -124,7 +157,7 @@
                  color="secondary"
                  icon="add"
                  clickable
-                 @click="prompt = true" />
+                 @click="textprompt = true" />
         </div>
 
         <!-- Confirm Changes (Only shows when list is in edit mode) -->
@@ -153,12 +186,16 @@
         //Edit
         edit: ref(false),
 
+        //Color
+        hex: ref('#1d43ab'),
+
         //Dialog
-        prompt: ref(false),
+        textprompt: ref(false),
+        colorprompt: ref(false),
         task: ref(''),
 
         //List
-        title: ref('New List'),
+        title: ref("New List"),
         tasks: [
             {
               label: "example Task",
@@ -168,6 +205,7 @@
          ]
       }
     },
+
 
     methods: {
 
