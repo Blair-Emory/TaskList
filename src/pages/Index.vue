@@ -1,16 +1,18 @@
 <template>
-  <div>
+  <q-page>
+
     <!-- New List button -->
-    <div class="q-pa-md">
-      <q-btn color="secondary"
-        icon="add"
-        clickable
-        @click="addNewList()"
-        label="Add new List" />
-    </div>
+      <q-page-sticky class="q-pa-sm ">
+        <q-btn color="secondary"
+          icon="add"
+          clickable
+          @click="addNewList()"
+          label="Add new List" />
+      </q-page-sticky>
+
     <!-- Start of List Components in Main Menu -->
 
-    <q-page class="flex">
+    <div class="flex q-pa-md">
 
       <div class="column container">
 
@@ -22,9 +24,9 @@
 
       </div>
 
-    </q-page>
+    </div>
 
-  </div>
+  </q-page>
 </template>
 
 <script>
