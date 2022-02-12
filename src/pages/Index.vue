@@ -17,8 +17,10 @@
       <div class="column container">
 
 
-        <div v-for="list in lists" :key ="list.title" class="cell" tabindex="0">
-          <to-do-list-component style="max-width: 100%; width: 300px" />
+        <div v-for="(list, index) in lists" :key ="list.title" class="cell" tabindex="0">
+          <to-do-list-component
+            style="max-width: 100%; width: 300px"
+            v-on:delete="deleteList(index)"/>
         </div>
 
 

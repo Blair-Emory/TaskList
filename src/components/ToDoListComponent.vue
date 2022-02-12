@@ -70,7 +70,8 @@
             <q-btn color="white" round flat dense icon="more_vert">
               <q-menu cover auto-close :style="{background: hex}">
                 <q-list>
-                  <q-item clickable>
+                  <q-item clickable
+                          @click="removeList()">
                     <q-item-section>Remove List</q-item-section>
                   </q-item>
                   <q-item clickable
@@ -231,6 +232,10 @@
 
       deleteTask(index) {
         this.tasks.splice(index, 1);
+      },
+
+      removeList() {
+        this.$emit("Delete");
       }
 
     },
