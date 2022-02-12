@@ -53,11 +53,14 @@
               <q-popup-edit
                 v-model="title"
                 auto-save
+                cover
                 v-slot="scope"
+                :validate="emptyStringValidation"
                 :disable="!edit">
                   <q-input
                     v-model="scope.value"
                     dense
+                    clearable
                     autofocus
                     @keyup.enter="scope.set"/>
               </q-popup-edit>
@@ -119,11 +122,14 @@
                   <q-popup-edit
                     v-model="taskItem.label"
                     auto-save
+                    cover
                     v-slot="scope"
+                    :validate="emptyStringValidation"
                     :disable="!edit">
                     <q-input
                       v-model="scope.value"
                       dense
+                      clearable
                       autofocus
                       @keyup.enter="scope.set"/>
                   </q-popup-edit>
@@ -236,6 +242,15 @@
 
       removeList() {
         this.$emit("Delete");
+      },
+
+      emptyStringValidation (val) {
+        if (val) {
+          return true
+        }
+        else {
+          return false
+        }
       }
 
     },
